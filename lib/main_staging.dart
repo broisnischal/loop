@@ -12,7 +12,6 @@ import 'package:loop/core/sys/environment.dart';
 import 'package:loop/di/injection_config.dart';
 
 void main() async {
-  // bootstrap(() => const App());
   await runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
