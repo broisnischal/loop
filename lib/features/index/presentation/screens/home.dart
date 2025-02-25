@@ -2,13 +2,14 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:loop/app/plugins/calendar_slider.dart';
-import 'package:loop/app/plugins/snackbar.dart';
+import 'package:loop/features/index/presentation/widgets/bottom_dialog.dart';
+import 'package:loop/plugins/calendar_slider.dart';
+import 'package:loop/plugins/snackbar.dart';
 import 'dart:math' as math;
 
 // Import the SwipeableItem class we created earlier
 // (Assuming it's in a file called swipeable_item.dart)
-import 'package:loop/app/plugins/swipable.dart';
+import 'package:loop/plugins/swipable.dart';
 import 'package:loop/di/injection_config.dart';
 import 'package:loop/router/router.dart';
 import 'package:loop/router/router.gr.dart';
@@ -200,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         scrolledUnderElevation: 0.0,
         notificationPredicate: (_) => false,
-        title: const Text(
+        title: Text(
           '  Loop',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),
         ),
@@ -213,11 +214,16 @@ class _HomeScreenState extends State<HomeScreen> {
               // Show filter options (in a real app)
             },
           ),
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: () {
-              // Show completed/skipped plans history (in a real app)
-            },
+          Builder(
+            builder: (context) => IconButton(
+              icon: Icon(Icons.history),
+              onPressed: () {
+                // Scaffold.of(context).showBottomSheet(
+                //   (context) => openTaskBottomSheet(context),
+                // );
+                AddTaskBottomSheet(context);
+              },
+            ),
           ),
         ],
       ),

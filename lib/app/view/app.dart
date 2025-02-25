@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loop/core/themes/dark.dart';
+import 'package:loop/core/themes/light.dart';
 import 'package:loop/di/injection_config.dart';
 import 'package:loop/l10n/l10n.dart';
 import 'package:loop/router/router.dart';
@@ -37,15 +39,9 @@ class _AppState extends State<App> {
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp.router(
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            backgroundColor: Colors.black,
-            actionsIconTheme: const IconThemeData(color: Colors.amber),
-            elevation: 0,
-          ),
-          useMaterial3: true,
-        ), // multiple themes options
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        // multiple themes options
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         // home: const HomeScreen(),
