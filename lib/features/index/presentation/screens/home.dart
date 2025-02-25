@@ -1,29 +1,22 @@
+import 'dart:math' as math;
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:loop/core/constants/colors.dart';
+import 'package:loop/di/injection_config.dart';
 import 'package:loop/features/index/presentation/widgets/bottom_dialog.dart';
 import 'package:loop/plugins/calendar_slider.dart';
 import 'package:loop/plugins/snackbar.dart';
-import 'dart:math' as math;
-
 // Import the SwipeableItem class we created earlier
 // (Assuming it's in a file called swipeable_item.dart)
 import 'package:loop/plugins/swipable.dart';
-import 'package:loop/di/injection_config.dart';
 import 'package:loop/router/router.dart';
 import 'package:loop/router/router.gr.dart';
 
 // Plan Entity class
 class PlanEntity {
-  final String id;
-  final DateTime date;
-  final String title;
-  final String description;
-  final String tag;
-  final TaskStatus status;
-  final bool toRemind;
-
   PlanEntity({
     required this.id,
     required this.date,
@@ -33,6 +26,13 @@ class PlanEntity {
     required this.status,
     required this.toRemind,
   });
+  final String id;
+  final DateTime date;
+  final String title;
+  final String description;
+  final String tag;
+  final TaskStatus status;
+  final bool toRemind;
 
   // Create a copy of this plan with some fields replaced
   PlanEntity copyWith({
@@ -60,7 +60,7 @@ enum TaskStatus { completed, pending, skipped }
 
 @RoutePage(name: 'HomePageRoute')
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -70,22 +70,45 @@ class _HomeScreenState extends State<HomeScreen> {
   late List<PlanEntity> _plans;
   final DateFormat _dateFormat = DateFormat('MMM dd, yyyy');
 
+  final ScrollController _scrollController = ScrollController();
+  bool _showHeader = true;
+  double _lastScrollOffset = 0;
+
   @override
   void initState() {
     super.initState();
     // Initialize with sample data
+    _scrollController.addListener(_handleScroll);
+
     _plans = _generateSamplePlans();
   }
 
+  void _handleScroll() {
+    final currentOffset = _scrollController.offset;
+    const double scrollThreshold = 100; // Adjust this value as needed
+
+    if (currentOffset > _lastScrollOffset && _showHeader) {
+      // Scrolling down
+      if (currentOffset > scrollThreshold) {
+        setState(() => _showHeader = false);
+      }
+    } else if (currentOffset < _lastScrollOffset && !_showHeader) {
+      // Scrolling up
+      setState(() => _showHeader = true);
+    }
+
+    _lastScrollOffset = currentOffset;
+  }
+
   List<PlanEntity> _generateSamplePlans() {
-    final List<String> tags = [
+    final tags = <String>[
       'Work',
       'Personal',
       'Health',
       'Finance',
-      'Learning'
+      'Learning',
     ];
-    final List<String> titles = [
+    final titles = <String>[
       'Complete Project Proposal',
       'Gym Session',
       'Read Flutter Documentation',
@@ -93,10 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
       'Doctor Appointment',
       'Pay Bills',
       'Learn Dart',
-      'Family Dinner'
+      'Family Dinner',
     ];
 
-    final List<String> descriptions = [
+    final descriptions = <String>[
       'Finish the project proposal for the client meeting',
       'Focus on cardio and upper body',
       'Go through the latest Flutter updates',
@@ -104,14 +127,14 @@ class _HomeScreenState extends State<HomeScreen> {
       'Annual health checkup',
       'Pay electricity and internet bills',
       'Complete chapter 5 of Dart programming',
-      'Dinner with family at favorite restaurant'
+      'Dinner with family at favorite restaurant',
     ];
 
-    final List<PlanEntity> plans = [];
+    final plans = <PlanEntity>[];
     final random = math.Random();
 
     // Generate random plans for the next 10 days
-    for (int i = 0; i < 10; i++) {
+    for (var i = 0; i < 20; i++) {
       final tagIndex = random.nextInt(tags.length);
       final titleIndex = random.nextInt(titles.length);
 
@@ -133,7 +156,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _handlePlanSwipe(int index, SwipeDirection direction) {
     setState(() {
-      if (direction == SwipeDirection.right) {
+      if (direction == SwipeDirection.right &&
+          _plans[index].status == TaskStatus.pending) {
         // Mark as completed when swiped right
         _plans[index] = _plans[index].copyWith(status: TaskStatus.completed);
       } else if (direction == SwipeDirection.left) {
@@ -191,17 +215,31 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _refreshPlans() async {
+    setState(() {
+      _plans = _generateSamplePlans();
+    });
+
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
+  @override
   Widget build(BuildContext context) {
     // Filter to show only pending plans
     final pendingPlans =
         _plans.where((plan) => plan.status == TaskStatus.pending).toList();
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 10, 10, 10),
+      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
-        scrolledUnderElevation: 0.0,
+        scrolledUnderElevation: 0,
         notificationPredicate: (_) => false,
-        title: Text(
+        title: const Text(
           '  Loop',
           style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),
         ),
@@ -216,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Builder(
             builder: (context) => IconButton(
-              icon: Icon(Icons.history),
+              icon: const Icon(Icons.add),
               onPressed: () {
                 // Scaffold.of(context).showBottomSheet(
                 //   (context) => openTaskBottomSheet(context),
@@ -240,40 +278,51 @@ class _HomeScreenState extends State<HomeScreen> {
           //     ),
           //   ),
           // ),
+
           LinearCalendarSlider(),
 
-          Expanded(
-            child: pendingPlans.isEmpty
-                ? _buildEmptyState()
-                : ListView.builder(
-                    itemCount: pendingPlans.length,
-                    // padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    itemBuilder: (context, index) {
-                      final plan = pendingPlans[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 0),
-                        child: SwipeableItem(
-                          key: ValueKey(plan.id),
-                          leftSwipeColor: Colors.red.shade100,
-                          rightSwipeColor: Colors.green.shade700,
-                          onSwipe: (direction) =>
-                              _handlePlanSwipe(index, direction),
-                          onRemoved: () => _removePlan(index),
-                          removeOnSwipe: true,
-                          child: Container(
-                            margin: EdgeInsets.only(
-                                bottom: 10, top: 10, left: 16, right: 16),
-                            // padding: const EdgeInsets.all(8.0),
-                            decoration: BoxDecoration(
-                              // color: Colors.white12,
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            child: _buildPlanCard(plan),
-                          ),
+          Builder(
+            builder: (context) {
+              return Expanded(
+                child: pendingPlans.isEmpty
+                    ? _buildEmptyState()
+                    : RefreshIndicator(
+                        onRefresh: _refreshPlans,
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: pendingPlans.length,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          itemBuilder: (context, index) {
+                            final plan = pendingPlans[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(),
+                              child: SwipeableItem(
+                                key: ValueKey(plan.id),
+                                leftSwipeColor: Colors.red.shade900,
+                                rightSwipeColor: Colors.green.shade700,
+                                onSwipe: (direction) =>
+                                    _handlePlanSwipe(index, direction),
+                                onRemoved: () => _removePlan(index),
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    bottom: 10,
+                                    top: 10,
+                                    left: 16,
+                                    right: 16,
+                                  ),
+                                  // padding: const EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                  ),
+                                  child: _buildPlanCard(plan),
+                                ),
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
+                      ),
+              );
+            },
           ),
         ],
       ),
@@ -290,12 +339,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildPlanCard(PlanEntity plan) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 19, 19, 19),
+        color: const Color.fromARGB(255, 17, 17, 17),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white10),
       ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -307,12 +356,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
-                      color: _getTagColor(plan.tag).withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: _getTagColor(plan.tag).withAlpha(30),
-                        width: 1,
-                      )),
+                    color: _getTagColor(plan.tag).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: _getTagColor(plan.tag).withAlpha(30),
+                    ),
+                  ),
                   child: Text(
                     plan.tag,
                     style: TextStyle(
@@ -332,7 +381,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 if (plan.toRemind)
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 8),
                     child: Icon(
                       Icons.notifications_active,
                       size: 16,
@@ -345,9 +394,10 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               plan.title,
               style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white70),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: Colors.white70,
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -398,6 +448,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.add),
             label: const Text('Add New Plan'),
             style: ElevatedButton.styleFrom(
+              backgroundColor: ColorConst.lightBlack,
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 12,

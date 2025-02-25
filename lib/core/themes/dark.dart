@@ -16,7 +16,7 @@ ThemeData darkTheme = ThemeData.light(useMaterial3: true).copyWith(
     actionsIconTheme: const IconThemeData(color: Colors.amber),
 
     // color: ColorConst.blackColor,
-    titleTextStyle: const TextStyle(color: ColorConst.whiteColor),
+    titleTextStyle: const TextStyle(fontSize: 24),
     systemOverlayStyle: SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
@@ -48,8 +48,8 @@ ThemeData darkTheme = ThemeData.light(useMaterial3: true).copyWith(
     shadowColor: ColorConst.blackColor.withOpacity(0.1),
     surfaceTintColor: ColorConst.whiteColor,
   ),
-  textTheme: TextTheme(
-    titleLarge: const TextStyle(
+  textTheme: const TextTheme(
+    titleLarge: TextStyle(
       color: ColorConst.whiteColor,
       fontSize: 20,
       fontWeight: FontWeight.w600,

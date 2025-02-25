@@ -15,7 +15,7 @@ class _SettingsChipsRowState extends State<SettingsChipsRow> {
     {"label": "Alarm", "icon": Icons.alarm, "active": false},
     {"label": "Snooze", "icon": Icons.snooze, "active": false},
     {"label": "Mute", "icon": Icons.volume_off, "active": false},
-    {"label": "Priority", "icon": Icons.priority_high, "active": false},
+    // {"label": "Priority", "icon": Icons.priority_high, "active": false},
   ];
 
   void toggleSetting(int index) {
@@ -34,12 +34,22 @@ class _SettingsChipsRowState extends State<SettingsChipsRow> {
         // padding: const EdgeInsets.symmetric(horizontal: 16),
         separatorBuilder: (_, __) => SizedBox(width: 8.w),
         itemBuilder: (context, index) {
-          return SettingChip(
-            icon: settings[index]["icon"],
-            label: settings[index]["label"],
-            isActive: settings[index]["active"],
-            onTap: () => toggleSetting(index),
-          );
+          return index == 0
+              ? Container(
+                  margin: EdgeInsets.only(left: 12.w),
+                  child: SettingChip(
+                    icon: settings[index]["icon"],
+                    label: settings[index]["label"],
+                    isActive: settings[index]["active"],
+                    onTap: () => toggleSetting(index),
+                  ),
+                )
+              : SettingChip(
+                  icon: settings[index]["icon"],
+                  label: settings[index]["label"],
+                  isActive: settings[index]["active"],
+                  onTap: () => toggleSetting(index),
+                );
         },
       ),
     );

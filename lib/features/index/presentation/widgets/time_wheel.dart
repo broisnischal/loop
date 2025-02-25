@@ -83,7 +83,7 @@ class __TimePickerContentState extends State<_TimePickerContent> {
         (!isHourScroll && _lastMinuteIndex != currentIndex)) {
       if (_lastHapticTime == null ||
           now.difference(_lastHapticTime!).inMilliseconds > 50) {
-        HapticFeedback.selectionClick();
+        HapticFeedback.lightImpact();
         _lastHapticTime = now;
         if (isHourScroll) {
           _lastHourIndex = currentIndex;
@@ -114,7 +114,7 @@ class __TimePickerContentState extends State<_TimePickerContent> {
   }
 
   void _onScrollEnd() {
-    HapticFeedback.lightImpact();
+    HapticFeedback.vibrate();
     final hour = _hourController.selectedItem;
     final minute = _minuteController.selectedItem;
     final period = widget.is24HourMode
@@ -291,7 +291,7 @@ class __TimePickerContentState extends State<_TimePickerContent> {
             ),
           ),
           onPressed: () {
-            HapticFeedback.mediumImpact();
+            HapticFeedback.lightImpact();
             Navigator.pop(context, _currentTime);
           },
           child: const Text('OK'),

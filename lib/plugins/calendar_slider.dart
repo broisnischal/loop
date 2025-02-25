@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:slide_countdown/slide_countdown.dart';
 
 class LinearCalendarSlider extends StatefulWidget {
+  const LinearCalendarSlider({super.key});
+
   @override
   _LinearCalendarSliderState createState() => _LinearCalendarSliderState();
 }
@@ -14,7 +14,7 @@ class LinearCalendarSlider extends StatefulWidget {
 class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
   final ScrollController _scrollController = ScrollController();
   DateTime _selectedDate = DateTime.now();
-  final double _dateItemWidth = 76.0;
+  final double _dateItemWidth = 76;
   final List<DateTime> _dates = [];
   double _lastOffset = 0;
   DateTime? _lastHapticTime;
@@ -29,15 +29,23 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
 
   void _generateDates() {
     final today = DateTime.now();
-    _dates.addAll(List.generate(61,
-        (i) => today.subtract(Duration(days: 60 - i)))); // Past 60 days + today
-    _dates.addAll(List.generate(
-        60, (i) => today.add(Duration(days: i + 1)))); // Next 60 days
+    _dates.addAll(
+      List.generate(
+        61,
+        (i) => today.subtract(Duration(days: 60 - i)),
+      ),
+    ); // Past 60 days + today
+    _dates.addAll(
+      List.generate(
+        60,
+        (i) => today.add(Duration(days: i + 1)),
+      ),
+    ); // Next 60 days
   }
 
   void _scrollToInitialPosition() {
     final initialOffset = (_dates.length ~/ 2 - 2) * _dateItemWidth;
-    _scrollController.jumpTo(initialOffset.toDouble());
+    _scrollController.jumpTo(initialOffset);
   }
 
   void _handleScroll() {
@@ -78,7 +86,7 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             child: Row(
               children: [
                 10.horizontalSpace,
@@ -90,13 +98,13 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
                     color: Colors.grey[400],
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 SlideCountdown(
                   decoration: BoxDecoration(
                     color: Colors.transparent,
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  duration: Duration(minutes: 60),
+                  duration: const Duration(minutes: 60),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -107,7 +115,7 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
             ),
           ),
           Container(
-            height: 90,
+            height: 70.h,
             decoration: BoxDecoration(
               border:
                   Border(top: BorderSide(color: Colors.grey.withOpacity(0.1))),
@@ -166,12 +174,6 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
 }
 
 class _DateItem extends StatelessWidget {
-  final DateTime date;
-  final bool isSelected;
-  final bool isToday;
-  final double width;
-  final VoidCallback onTap;
-
   const _DateItem({
     required this.date,
     required this.isSelected,
@@ -179,18 +181,30 @@ class _DateItem extends StatelessWidget {
     required this.width,
     required this.onTap,
   });
+  final DateTime date;
+  final bool isSelected;
+  final bool isToday;
+  final double width;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      focusColor: Colors.transparent,
+      borderRadius: BorderRadius.circular(8),
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
+      splashFactory: InkRipple.splashFactory,
       onTap: onTap,
       child: Container(
         width: width,
-        padding: EdgeInsets.symmetric(vertical: 8),
+        padding: EdgeInsets.symmetric(
+          vertical: 4.h,
+        ),
         decoration: BoxDecoration(
           border: isSelected
-              ? Border(
-                  bottom: BorderSide(color: Colors.blueAccent, width: 2),
+              ? const Border(
+                  bottom: BorderSide(color: Colors.blueAccent, width: 1.5),
                 )
               : null,
         ),
@@ -200,16 +214,16 @@ class _DateItem extends StatelessWidget {
             Text(
               DateFormat('E').format(date).toUpperCase(),
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 9.sp,
                 fontWeight: FontWeight.w500,
                 color: isSelected ? Colors.blueAccent : Colors.grey[600],
                 letterSpacing: -0.2,
               ),
             ),
-            SizedBox(height: 8),
+            4.verticalSpace,
             Container(
-              width: 32,
-              height: 32,
+              width: 30.w,
+              height: 30.h,
               decoration: BoxDecoration(
                 color: isToday && !isSelected
                     ? Colors.blueAccent.withOpacity(0.1)

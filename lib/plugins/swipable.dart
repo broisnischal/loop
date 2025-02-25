@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum SwipeDirection {
   left,
@@ -8,6 +9,19 @@ enum SwipeDirection {
 }
 
 class SwipeableItem extends StatefulWidget {
+  const SwipeableItem({
+    required this.child,
+    super.key,
+    this.onSwipe,
+    this.threshold = 0.3,
+    this.animationDuration = const Duration(milliseconds: 300),
+    this.leftSwipeColor = Colors.red,
+    this.rightSwipeColor = Colors.green,
+    this.removeOnSwipe = true,
+    this.onRemoved,
+    this.leftSwipeEnabled = true,
+    this.rightSwipeEnabled = true,
+  });
   final Widget child;
   final Function(SwipeDirection direction)? onSwipe;
   final double threshold;
@@ -19,33 +33,20 @@ class SwipeableItem extends StatefulWidget {
   final bool leftSwipeEnabled;
   final bool rightSwipeEnabled;
 
-  const SwipeableItem({
-    Key? key,
-    required this.child,
-    this.onSwipe,
-    this.threshold = 0.3,
-    this.animationDuration = const Duration(milliseconds: 300),
-    this.leftSwipeColor = Colors.red,
-    this.rightSwipeColor = Colors.green,
-    this.removeOnSwipe = true,
-    this.onRemoved,
-    this.leftSwipeEnabled = true,
-    this.rightSwipeEnabled = true,
-  }) : super(key: key);
-
   @override
   State<SwipeableItem> createState() => _SwipeableItemState();
 }
 
-class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProviderStateMixin {
+class _SwipeableItemState extends State<SwipeableItem>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<Offset> _slideAnimation;
   late Animation<double> _opacityAnimation;
   late Animation<double> _heightAnimation;
-  
+
   double _dragExtent = 1;
   bool _isVisible = true;
-  double _itemHeight = 1;
+  final double _itemHeight = 1;
 
   @override
   void initState() {
@@ -58,26 +59,32 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
     _slideAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
 
     _opacityAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
-    ));
+      begin: 1,
+      end: 0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.5, 1, curve: Curves.easeOut),
+      ),
+    );
 
     _heightAnimation = Tween<double>(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
-    ));
+      begin: 1,
+      end: 0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.5, 1, curve: Curves.easeOut),
+      ),
+    );
   }
 
   @override
@@ -87,11 +94,11 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
   }
 
   void _handleDragUpdate(DragUpdateDetails details) {
-    if ((!widget.leftSwipeEnabled && details.delta.dx < 0) || 
+    if ((!widget.leftSwipeEnabled && details.delta.dx < 0) ||
         (!widget.rightSwipeEnabled && details.delta.dx > 0)) {
       return;
     }
-    
+
     setState(() {
       _dragExtent += details.delta.dx;
     });
@@ -99,11 +106,12 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
     _slideAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: Offset(_dragExtent, 0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOut,
-    ));
-
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOut,
+      ),
+    );
   }
 
   void _handleDragEnd(DragEndDetails details) {
@@ -112,49 +120,70 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
     // Get the width from the constraints instead of context.size
     final width = MediaQuery.of(context).size.width;
     final threshold = widget.threshold * width;
-    SwipeDirection direction = SwipeDirection.none;
+    var direction = SwipeDirection.none;
 
     if (_dragExtent > threshold && widget.rightSwipeEnabled) {
       // Swiped right beyond threshold
       _slideAnimation = Tween<Offset>(
         begin: Offset(_dragExtent / width, 0),
         end: const Offset(1.5, 0),
-      ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOut,
-      ));
+      ).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Curves.easeOut,
+        ),
+      );
       direction = SwipeDirection.right;
     } else if (_dragExtent < -threshold && widget.leftSwipeEnabled) {
       // Swiped left beyond threshold
       _slideAnimation = Tween<Offset>(
         begin: Offset(_dragExtent / width, 0),
         end: const Offset(-1.5, 0),
-      ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOut,
-      ));
+      ).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Curves.easeOut,
+        ),
+      );
       direction = SwipeDirection.left;
-    } else {
+    } else if (_dragExtent.abs() < threshold) {
       // Not swiped enough, bounce back
       _slideAnimation = Tween<Offset>(
         begin: Offset(_dragExtent / width, 0),
         end: Offset.zero,
-      ).animate(CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.elasticOut,
-      ));
+      ).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Curves.elasticOut,
+        ),
+      );
       _animationController.forward().then((_) {
         setState(() {
           _dragExtent = 0;
         });
       });
       return;
+    } else {
+      _slideAnimation = Tween<Offset>(
+        begin: Offset(_dragExtent / width, 0),
+        end: Offset.zero,
+      ).animate(
+        CurvedAnimation(
+          parent: _animationController,
+          curve: Curves.elasticOut,
+        ),
+      );
+      _animationController.forward().then((_) {
+        setState(() {
+          _dragExtent = 0;
+        });
+      });
     }
 
     // Handle successful swipe
     if (direction != SwipeDirection.none) {
       widget.onSwipe?.call(direction);
-      
+
       if (widget.removeOnSwipe) {
         _animationController.forward().then((_) {
           setState(() {
@@ -180,13 +209,15 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
   Color _getBackgroundColor() {
     // Calculate opacity based on drag extent relative to screen width
     final width = MediaQuery.of(context).size.width;
-    
+
     if (_dragExtent > 0) {
       // Right swipe (green background)
-      return widget.rightSwipeColor.withOpacity((_dragExtent / width).clamp(0.0, 0.3));
+      return widget.rightSwipeColor
+          .withOpacity((_dragExtent / width).clamp(0.0, 0.3));
     } else if (_dragExtent < 0) {
       // Left swipe (red background)
-      return widget.leftSwipeColor.withOpacity((-_dragExtent / width).clamp(0.0, 0.3));
+      return widget.leftSwipeColor
+          .withOpacity((-_dragExtent / width).clamp(0.0, 0.3));
     }
     return Colors.transparent;
   }
@@ -208,12 +239,17 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
         animation: _animationController,
         builder: (context, child) {
           return Container(
-            color: _getBackgroundColor(), 
+            color: _getBackgroundColor(),
+            alignment: Alignment.centerRight,
             child: FadeTransition(
-              opacity: widget.removeOnSwipe ? _opacityAnimation : const AlwaysStoppedAnimation(1.0),
+              opacity: widget.removeOnSwipe
+                  ? _opacityAnimation
+                  : const AlwaysStoppedAnimation(1),
               child: SizeTransition(
-                sizeFactor: widget.removeOnSwipe ? _heightAnimation : const AlwaysStoppedAnimation(1.0),
-                axisAlignment: 1.0,
+                sizeFactor: widget.removeOnSwipe
+                    ? _heightAnimation
+                    : const AlwaysStoppedAnimation(1),
+                // axisAlignment: 1,
                 child: SlideTransition(
                   position: _slideAnimation,
                   child: Transform.translate(
@@ -228,4 +264,4 @@ class _SwipeableItemState extends State<SwipeableItem> with SingleTickerProvider
       ),
     );
   }
-} 
+}
