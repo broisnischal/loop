@@ -15,13 +15,13 @@ ThemeData lightTheme = ThemeData.light(useMaterial3: true).copyWith(
     // color: ColorConst.blackColor,
     actionsIconTheme: const IconThemeData(color: Colors.amber),
     titleTextStyle: const TextStyle(color: ColorConst.blackColor),
-    systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.dark,
-      statusBarBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.grey.shade100,
-      systemNavigationBarIconBrightness: Brightness.dark,
-    ),
+    // systemOverlayStyle: SystemUiOverlayStyle(
+    //   statusBarColor: Colors.transparent,
+    //   statusBarIconBrightness: Brightness.dark,
+    //   statusBarBrightness: Brightness.light,
+    //   systemNavigationBarColor: Colors.grey.shade100,
+    //   systemNavigationBarIconBrightness: Brightness.dark,
+    // ),
   ),
   splashColor: ColorConst.blackColor.withOpacity(0.1),
   tabBarTheme: TabBarTheme(

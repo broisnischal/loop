@@ -20,7 +20,7 @@ class DevEnvironment implements EnvironmentF {
   @override
   Flavor get flavor => Flavor.development;
   @override
-  String get apiUrl => 'https://dev.api.com';
+  String get apiUrl => 'http://localhost:3000/v1/api';
   @override
   String get apiKey => 'dev_key';
 }
@@ -31,7 +31,7 @@ class StagingEnvironment implements EnvironmentF {
   @override
   Flavor get flavor => Flavor.staging;
   @override
-  String get apiUrl => 'https://staging.api.com';
+  String get apiUrl => 'https://loop.snehaa.store/v1/api';
   @override
   String get apiKey => 'staging_key';
 }

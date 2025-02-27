@@ -17,13 +17,13 @@ ThemeData darkTheme = ThemeData.light(useMaterial3: true).copyWith(
 
     // color: ColorConst.blackColor,
     titleTextStyle: const TextStyle(fontSize: 24),
-    systemOverlayStyle: SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.light,
-      systemNavigationBarColor: Colors.grey.shade100,
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
+    // systemOverlayStyle: SystemUiOverlayStyle(
+    //   // statusBarColor: Colors.transparent,
+    //   statusBarIconBrightness: Brightness.light,
+    //   statusBarBrightness: Brightness.light,
+    //   systemNavigationBarColor: Colors.grey.shade100,
+    //   systemNavigationBarIconBrightness: Brightness.light,
+    // ),
   ),
   splashColor: ColorConst.blackColor.withOpacity(0.1),
   tabBarTheme: TabBarTheme(
