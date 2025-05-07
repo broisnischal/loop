@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:loop/core/sys/theme_notifier.dart';
 import 'package:loop/core/themes/theme.dart';
 import 'package:loop/di/injection_config.dart';
 import 'package:loop/l10n/l10n.dart';
@@ -38,15 +40,21 @@ class _AppState extends State<App> {
       minTextAdapt: true,
       splitScreenMode: true,
       child: MaterialApp.router(
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        // multiple themes options
+        theme: appThemeData[AppThemeType.light],
+        darkTheme: appThemeData[AppThemeType.dark],
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        // home: const HomeScreen(),
         routerConfig: mainRouter.config(),
         debugShowCheckedModeBanner: false,
       ),
+      // child: BlocProvider<ThemeCubit>(
+      //   create: (_) => ThemeCubit(),
+      //   child: BlocBuilder<ThemeCubit, ThemeData>(
+      //     builder: (context, themeData) {
+      //       return
+      //     },
+      //   ),
+      // ),
     );
   }
 }

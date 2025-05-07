@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
@@ -55,8 +56,7 @@ ThemeData get lightTheme => ThemeData(
           foregroundColor: Colors.white,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -64,8 +64,7 @@ ThemeData get lightTheme => ThemeData(
           foregroundColor: Colors.black,
           side: const BorderSide(color: Colors.black, width: 1.5),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -99,8 +98,7 @@ ThemeData get lightTheme => ThemeData(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFE53935), width: 1.5),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.black,
@@ -276,13 +274,12 @@ ThemeData get darkTheme => ThemeData(
         outline: Color(0xFF424242), // Dark grey
       ),
       scaffoldBackgroundColor: Colors.black,
-      appBarTheme: const AppBarTheme(
+      appBarTheme: AppBarTheme(
           backgroundColor: Colors.black,
           foregroundColor: Colors.white,
           elevation: 0,
           titleTextStyle: TextStyle(
             color: Colors.white,
-            fontSize: 20,
             fontWeight: FontWeight.bold,
           )),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -291,8 +288,7 @@ ThemeData get darkTheme => ThemeData(
           foregroundColor: Colors.black,
           elevation: 0,
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
@@ -300,8 +296,7 @@ ThemeData get darkTheme => ThemeData(
           foregroundColor: Colors.white,
           side: const BorderSide(color: Colors.white, width: 1.5),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -335,8 +330,7 @@ ThemeData get darkTheme => ThemeData(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xFFEF9A9A), width: 1.5),
         ),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       tabBarTheme: const TabBarTheme(
         labelColor: Colors.white,
@@ -491,3 +485,30 @@ ThemeData get darkTheme => ThemeData(
         side: const BorderSide(color: Color(0xFFBDBDBD), width: 1.5),
       ),
     );
+
+enum AppThemeType { light, dark, pastel, oledDark }
+
+final appThemeData = {
+  AppThemeType.light: ThemeData.light().copyWith(
+      // colorScheme: ColorScheme.light(primary: Colors.blue),
+      ),
+  AppThemeType.dark: ThemeData.dark().copyWith(
+      // colorScheme: ColorScheme.dark(primary: Colors.deepPurple),
+      ),
+  AppThemeType.pastel: ThemeData(
+    brightness: Brightness.light,
+    colorScheme: ColorScheme.light(
+      primary: Colors.pink[100]!,
+      secondary: Colors.teal[100]!,
+    ),
+    scaffoldBackgroundColor: Colors.pink[50],
+  ),
+  AppThemeType.oledDark: ThemeData(
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: Colors.black,
+    colorScheme: ColorScheme.dark(
+      primary: Colors.white,
+      secondary: Colors.grey[800]!,
+    ),
+  ),
+};

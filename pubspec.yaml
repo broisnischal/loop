@@ -25,6 +25,9 @@ dependencies:
   injectable: ^2.5.0
   injectable_generator: ^2.7.0
   intl: ^0.19.0
+  package_info_plus: ^8.3.0
+  path_provider: ^2.1.5
+  shared_preferences: ^2.5.3
   slide_countdown: ^2.0.2
   time_picker_spinner: ^1.0.2
   uuid: ^4.5.1
@@ -42,14 +45,13 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   generate: true
-  assets:
-    - assets/images/
-    - assets/icons/
-    - assets/fonts/
-    - assets/json/
-    - assets/rive/
-    - assets/svgs/
-
+  # assets:
+  #   - assets/images/
+  #   - assets/icons/
+  #   - assets/fonts/
+  #   - assets/json/
+  #   - assets/rive/
+  #   - assets/svgs/
 
 flutter_gen:
   output: lib/gen/
@@ -63,7 +65,6 @@ flutter_gen:
       class_name: MyAssets
       package_parameter_enabled: false
       style: dot-delimiter
-
 
 flutter_launcher_icons:
   android: "launcher_icon"

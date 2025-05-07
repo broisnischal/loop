@@ -23,8 +23,7 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
   void initState() {
     super.initState();
     _generateDates();
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _scrollToInitialPosition());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToInitialPosition());
   }
 
   void _generateDates() {
@@ -52,8 +51,7 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
     final currentOffset = _scrollController.offset;
     if ((currentOffset - _lastOffset).abs() > _dateItemWidth / 2) {
       final now = DateTime.now();
-      if (_lastHapticTime == null ||
-          now.difference(_lastHapticTime!).inMilliseconds > 50) {
+      if (_lastHapticTime == null || now.difference(_lastHapticTime!).inMilliseconds > 50) {
         HapticFeedback.lightImpact();
         _lastHapticTime = now;
       }
@@ -92,10 +90,9 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
                 10.horizontalSpace,
                 Text(
                   DateFormat('MMMM yyyy').format(_selectedDate),
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[400],
                   ),
                 ),
                 const Spacer(),
@@ -124,8 +121,7 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
           Container(
             height: 70.h,
             decoration: BoxDecoration(
-              border:
-                  Border(top: BorderSide(color: Colors.grey.withOpacity(0.1))),
+              border: Border(top: BorderSide(color: Colors.grey.withOpacity(0.1))),
             ),
             child: NotificationListener<ScrollNotification>(
               onNotification: (notification) {
@@ -236,9 +232,7 @@ class _DateItem extends StatelessWidget {
                     ? Colors.blueAccent.withOpacity(0.1)
                     : Colors.transparent,
                 shape: BoxShape.circle,
-                border: isToday
-                    ? Border.all(color: Colors.blueAccent.withOpacity(0.4))
-                    : null,
+                border: isToday ? Border.all(color: Colors.blueAccent.withOpacity(0.4)) : null,
               ),
               child: Center(
                 child: Text(

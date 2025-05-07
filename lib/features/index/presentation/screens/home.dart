@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:loop/core/constants/colors.dart';
+import 'package:loop/core/sys/theme_notifier.dart';
+import 'package:loop/core/themes/theme.dart';
 import 'package:loop/di/injection_config.dart';
 import 'package:loop/features/index/presentation/widgets/bottom_dialog.dart';
 import 'package:loop/plugins/calendar_slider.dart';
@@ -13,6 +15,7 @@ import 'package:loop/plugins/snackbar.dart';
 import 'package:loop/plugins/swipable.dart';
 import 'package:loop/router/router.dart';
 import 'package:loop/router/router.gr.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 // Plan Entity class
 class PlanEntity {
@@ -155,8 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _handlePlanSwipe(int index, SwipeDirection direction) {
     setState(() {
-      if (direction == SwipeDirection.right &&
-          _plans[index].status == TaskStatus.pending) {
+      if (direction == SwipeDirection.right && _plans[index].status == TaskStatus.pending) {
         // Mark as completed when swiped right
         _plans[index] = _plans[index].copyWith(status: TaskStatus.completed);
       } else if (direction == SwipeDirection.left) {
@@ -230,8 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // Filter to show only pending plans
-    final pendingPlans =
-        _plans.where((plan) => plan.status == TaskStatus.pending).toList();
+    final pendingPlans = _plans.where((plan) => plan.status == TaskStatus.pending).toList();
 
     final router = getIt<AppRouter>();
 
@@ -250,6 +251,20 @@ class _HomeScreenState extends State<HomeScreen> {
               // Show filter options (in a real app)
             },
           ),
+          // PopupMenuButton<AppThemeType>(
+          //   icon: const Icon(Icons.color_lens_outlined),
+          //   onSelected: (type) {
+          //     context.read<ThemeCubit>().changeTheme(type);
+          //   },
+          //   itemBuilder: (_) => AppThemeType.values
+          //       .map(
+          //         (type) => PopupMenuItem(
+          //           value: type,
+          //           child: Text(type.name),
+          //         ),
+          //       )
+          //       .toList(),
+          // ),
           Builder(
             builder: (context) => IconButton(
               icon: const Icon(Icons.add),
@@ -309,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   //     ),
                   //   ),
                   // ),
-                  const LinearCalendarSlider(),
+                  // const LinearCalendarSlider(),
 
                   Builder(
                     builder: (context) {
@@ -321,8 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: ListView.builder(
                                   physics: const BouncingScrollPhysics(),
                                   itemCount: pendingPlans.length,
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
                                   itemBuilder: (context, index) {
                                     final plan = pendingPlans[index];
                                     return Padding(
@@ -331,8 +345,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         key: ValueKey(plan.id),
                                         leftSwipeColor: Colors.red.shade900,
                                         rightSwipeColor: Colors.green.shade700,
-                                        onSwipe: (direction) =>
-                                            _handlePlanSwipe(index, direction),
+                                        onSwipe: (direction) => _handlePlanSwipe(index, direction),
                                         onRemoved: () => _removePlan(index),
                                         child: Container(
                                           margin: const EdgeInsets.only(
@@ -343,8 +356,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                           // padding: const EdgeInsets.all(8.0),
                                           decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(24),
+                                            borderRadius: BorderRadius.circular(24),
                                           ),
                                           child: _buildPlanCard(plan),
                                         ),
