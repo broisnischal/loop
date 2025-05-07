@@ -31,17 +31,12 @@ ThemeData get lightTheme => ThemeData(
       brightness: Brightness.light,
       colorScheme: const ColorScheme.light(
         primary: Colors.black, // Pure black
-        onPrimary: Colors.white, // Pure white
         secondary: Color(0xFF424242), // Dark grey
         onSecondary: Colors.white, // Pure white
         tertiary: Color(0xFF757575), // Medium grey
         onTertiary: Colors.white, // Pure white
         error: Color(0xFFE53935), // Red (one of the few colors)
-        onError: Colors.white, // Pure white
-        background: Colors.white, // Pure white
-        onBackground: Colors.black, // Pure black
-        surface: Colors.white, // Pure white
-        onSurface: Colors.black, // Pure black
+        surfaceBright: Colors.white, // Pure black
         outline: Color(0xFFE0E0E0), // Very light grey
       ),
       scaffoldBackgroundColor: Colors.white,
@@ -62,7 +57,7 @@ ThemeData get lightTheme => ThemeData(
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           foregroundColor: Colors.black,
-          side: const BorderSide(color: Colors.black, width: 1.5),
+          side: const BorderSide(width: 1.5),
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 24),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
@@ -92,7 +87,7 @@ ThemeData get lightTheme => ThemeData(
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.black, width: 1.5),
+          borderSide: const BorderSide(width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -136,91 +131,91 @@ ThemeData get lightTheme => ThemeData(
       ),
       textTheme: TextTheme(
         displayLarge: GoogleFonts.inter(
-          fontSize: 57.0,
+          fontSize: 57,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: Colors.black,
         ),
         displayMedium: GoogleFonts.inter(
-          fontSize: 45.0,
+          fontSize: 45,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: Colors.black,
         ),
         displaySmall: GoogleFonts.inter(
-          fontSize: 36.0,
+          fontSize: 36,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: Colors.black,
         ),
         headlineLarge: GoogleFonts.inter(
-          fontSize: 32.0,
+          fontSize: 32,
           fontWeight: FontWeight.w400,
           letterSpacing: -0.5,
           color: Colors.black,
         ),
         headlineMedium: GoogleFonts.inter(
-          fontSize: 28.0,
+          fontSize: 28,
           fontWeight: FontWeight.w400,
           letterSpacing: -0.25,
           color: Colors.black,
         ),
         headlineSmall: GoogleFonts.inter(
-          fontSize: 24.0,
+          fontSize: 24,
           fontWeight: FontWeight.w400,
           letterSpacing: 0,
           color: Colors.black,
         ),
         titleLarge: GoogleFonts.inter(
-          fontSize: 22.0,
+          fontSize: 22,
           fontWeight: FontWeight.w500,
           letterSpacing: 0,
           color: Colors.black,
         ),
         titleMedium: GoogleFonts.inter(
-          fontSize: 18.0,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.15,
           color: Colors.black,
         ),
         titleSmall: GoogleFonts.inter(
-          fontSize: 16.0,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.1,
           color: Colors.black,
         ),
         labelLarge: GoogleFonts.inter(
-          fontSize: 16.0,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.1,
           color: Colors.black,
         ),
         labelMedium: GoogleFonts.inter(
-          fontSize: 14.0,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.5,
           color: Colors.black,
         ),
         labelSmall: GoogleFonts.inter(
-          fontSize: 12.0,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.5,
           color: Colors.black,
         ),
         bodyLarge: GoogleFonts.inter(
-          fontSize: 16.0,
+          fontSize: 16,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.5,
           color: Colors.black,
         ),
         bodyMedium: GoogleFonts.inter(
-          fontSize: 14.0,
+          fontSize: 14,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.25,
           color: Colors.black,
         ),
         bodySmall: GoogleFonts.inter(
-          fontSize: 12.0,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.4,
           color: Colors.black,
@@ -240,15 +235,15 @@ ThemeData get lightTheme => ThemeData(
         valueIndicatorTextStyle: const TextStyle(color: Colors.white),
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.selected)) {
               return Colors.black;
             }
             return Colors.transparent;
           },
         ),
-        checkColor: MaterialStateProperty.all(Colors.white),
+        checkColor: WidgetStateProperty.all(Colors.white),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         side: const BorderSide(color: Color(0xFF757575), width: 1.5),
       ),
@@ -260,28 +255,23 @@ ThemeData get darkTheme => ThemeData(
       brightness: Brightness.dark,
       colorScheme: const ColorScheme.dark(
         primary: Colors.white, // Pure white
-        onPrimary: Colors.black, // Pure black
         secondary: Color(0xFFE0E0E0), // Light grey
-        onSecondary: Colors.black, // Pure black
         tertiary: Color(0xFFBDBDBD), // Medium grey
         onTertiary: Colors.black, // Pure black
         error: Color(0xFFEF9A9A), // Light red
-        onError: Colors.black, // Pure black
-        background: Colors.black, // Pure black
-        onBackground: Colors.white, // Pure white
-        surface: Color(0xFF121212), // Very dark grey
-        onSurface: Colors.white, // Pure white
+        surface: Colors.black, // Pure white
         outline: Color(0xFF424242), // Dark grey
       ),
       scaffoldBackgroundColor: Colors.black,
-      appBarTheme: AppBarTheme(
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
-          elevation: 0,
-          titleTextStyle: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          )),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
@@ -368,91 +358,91 @@ ThemeData get darkTheme => ThemeData(
       ),
       textTheme: TextTheme(
         displayLarge: GoogleFonts.inter(
-          fontSize: 57.0,
+          fontSize: 57,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: Colors.white,
         ),
         displayMedium: GoogleFonts.inter(
-          fontSize: 45.0,
+          fontSize: 45,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: Colors.white,
         ),
         displaySmall: GoogleFonts.inter(
-          fontSize: 36.0,
+          fontSize: 36,
           fontWeight: FontWeight.w300,
           letterSpacing: -0.5,
           color: Colors.white,
         ),
         headlineLarge: GoogleFonts.inter(
-          fontSize: 32.0,
+          fontSize: 32,
           fontWeight: FontWeight.w400,
           letterSpacing: -0.5,
           color: Colors.white,
         ),
         headlineMedium: GoogleFonts.inter(
-          fontSize: 28.0,
+          fontSize: 28,
           fontWeight: FontWeight.w400,
           letterSpacing: -0.25,
           color: Colors.white,
         ),
         headlineSmall: GoogleFonts.inter(
-          fontSize: 24.0,
+          fontSize: 24,
           fontWeight: FontWeight.w400,
           letterSpacing: 0,
           color: Colors.white,
         ),
         titleLarge: GoogleFonts.inter(
-          fontSize: 22.0,
+          fontSize: 22,
           fontWeight: FontWeight.w500,
           letterSpacing: 0,
           color: Colors.white,
         ),
         titleMedium: GoogleFonts.inter(
-          fontSize: 18.0,
+          fontSize: 18,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.15,
           color: Colors.white,
         ),
         titleSmall: GoogleFonts.inter(
-          fontSize: 16.0,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.1,
           color: Colors.white,
         ),
         labelLarge: GoogleFonts.inter(
-          fontSize: 16.0,
+          fontSize: 16,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.1,
           color: Colors.white,
         ),
         labelMedium: GoogleFonts.inter(
-          fontSize: 14.0,
+          fontSize: 14,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.5,
           color: Colors.white,
         ),
         labelSmall: GoogleFonts.inter(
-          fontSize: 12.0,
+          fontSize: 12,
           fontWeight: FontWeight.w500,
           letterSpacing: 0.5,
           color: Colors.white,
         ),
         bodyLarge: GoogleFonts.inter(
-          fontSize: 16.0,
+          fontSize: 16,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.5,
           color: Colors.white,
         ),
         bodyMedium: GoogleFonts.inter(
-          fontSize: 14.0,
+          fontSize: 14,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.25,
           color: Colors.white,
         ),
         bodySmall: GoogleFonts.inter(
-          fontSize: 12.0,
+          fontSize: 12,
           fontWeight: FontWeight.w400,
           letterSpacing: 0.4,
           color: Colors.white,
@@ -472,15 +462,15 @@ ThemeData get darkTheme => ThemeData(
         valueIndicatorTextStyle: const TextStyle(color: Colors.black),
       ),
       checkboxTheme: CheckboxThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color>(
-          (Set<MaterialState> states) {
-            if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith<Color>(
+          (Set<WidgetState> states) {
+            if (states.contains(WidgetState.selected)) {
               return Colors.white;
             }
             return Colors.transparent;
           },
         ),
-        checkColor: MaterialStateProperty.all(Colors.black),
+        checkColor: WidgetStateProperty.all(Colors.black),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         side: const BorderSide(color: Color(0xFFBDBDBD), width: 1.5),
       ),
@@ -489,12 +479,8 @@ ThemeData get darkTheme => ThemeData(
 enum AppThemeType { light, dark, pastel, oledDark }
 
 final appThemeData = {
-  AppThemeType.light: ThemeData.light().copyWith(
-      // colorScheme: ColorScheme.light(primary: Colors.blue),
-      ),
-  AppThemeType.dark: ThemeData.dark().copyWith(
-      // colorScheme: ColorScheme.dark(primary: Colors.deepPurple),
-      ),
+  AppThemeType.light: lightTheme,
+  AppThemeType.dark: darkTheme,
   AppThemeType.pastel: ThemeData(
     brightness: Brightness.light,
     colorScheme: ColorScheme.light(

@@ -288,7 +288,7 @@ class _HomeScreenState extends State<HomeScreen> {
             bottom: TabBar(
               enableFeedback: true,
               automaticIndicatorColorAdjustment: false,
-              indicatorColor: Theme.of(context).colorScheme.primary,
+              indicatorColor: Theme.of(context).colorScheme.secondary,
               dividerHeight: 0,
               indicator: UnderlineTabIndicator(
                 borderSide: BorderSide(
