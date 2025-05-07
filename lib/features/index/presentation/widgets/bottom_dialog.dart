@@ -277,7 +277,7 @@ Widget openTaskBottomSheet(
     // }
     builder: (context, constraints) {
       return Container(
-        height: constraints.maxHeight - 150.h,
+        height: constraints.maxHeight - 100.h,
         // constraints: BoxConstraints(maxHeight: 600.h),
         decoration: BoxDecoration(
           color: ColorConst.blackSmoke,
@@ -293,8 +293,6 @@ Widget openTaskBottomSheet(
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.only(
-              // left: 24.h,
-              // right: 24.h,
               bottom: MediaQuery.of(context).viewInsets.bottom + 16,
               top: 16.h,
             ),

@@ -3,14 +3,13 @@ import 'dart:math' as math;
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:loop/core/constants/colors.dart';
 import 'package:loop/di/injection_config.dart';
 import 'package:loop/features/index/presentation/widgets/bottom_dialog.dart';
 import 'package:loop/plugins/calendar_slider.dart';
 import 'package:loop/plugins/snackbar.dart';
-// Import the SwipeableItem class we created earlier
-// (Assuming it's in a file called swipeable_item.dart)
 import 'package:loop/plugins/swipable.dart';
 import 'package:loop/router/router.dart';
 import 'package:loop/router/router.gr.dart';
@@ -234,16 +233,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final pendingPlans =
         _plans.where((plan) => plan.status == TaskStatus.pending).toList();
 
+    final router = getIt<AppRouter>();
+
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
       appBar: AppBar(
         scrolledUnderElevation: 0,
         notificationPredicate: (_) => false,
         title: const Text(
           '  Loop',
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.amber),
         ),
-        backgroundColor: Colors.transparent,
         elevation: 0,
         actions: [
           IconButton(
@@ -256,76 +254,127 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (context) => IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
+                router.push(const AddHabitRoute());
                 // Scaffold.of(context).showBottomSheet(
                 //   (context) => openTaskBottomSheet(context),
                 // );
-                AddTaskBottomSheet(context);
+                // AddTaskBottomSheet(context);
               },
             ),
           ),
         ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: Text(
-          //     'Swipe right to complete, left to skip',
-          //     style: TextStyle(
-          //       color: Colors.grey[400],
-          //       fontSize: 14,
-          //     ),
-          //   ),
-          // ),
+      body: DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            scrolledUnderElevation: 0,
+            toolbarHeight: 0,
+            bottom: TabBar(
+              enableFeedback: true,
+              automaticIndicatorColorAdjustment: false,
+              indicatorColor: Theme.of(context).colorScheme.primary,
+              dividerHeight: 0,
+              indicator: UnderlineTabIndicator(
+                borderSide: BorderSide(
+                  width: 3,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+              tabs: const [
+                Tab(
+                  text: 'Active',
+                ),
+                Tab(
+                  text: 'Completed',
+                ),
+                Tab(
+                  text: 'All Task',
+                ),
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Padding(
+                  //   padding: const EdgeInsets.all(16.0),
+                  //   child: Text(
+                  //     'Swipe right to complete, left to skip',
+                  //     style: TextStyle(
+                  //       color: Colors.grey[400],
+                  //       fontSize: 14,
+                  //     ),
+                  //   ),
+                  // ),
+                  const LinearCalendarSlider(),
 
-          LinearCalendarSlider(),
-
-          Builder(
-            builder: (context) {
-              return Expanded(
-                child: pendingPlans.isEmpty
-                    ? _buildEmptyState()
-                    : RefreshIndicator(
-                        onRefresh: _refreshPlans,
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: pendingPlans.length,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          itemBuilder: (context, index) {
-                            final plan = pendingPlans[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(),
-                              child: SwipeableItem(
-                                key: ValueKey(plan.id),
-                                leftSwipeColor: Colors.red.shade900,
-                                rightSwipeColor: Colors.green.shade700,
-                                onSwipe: (direction) =>
-                                    _handlePlanSwipe(index, direction),
-                                onRemoved: () => _removePlan(index),
-                                child: Container(
-                                  margin: const EdgeInsets.only(
-                                    bottom: 10,
-                                    top: 10,
-                                    left: 16,
-                                    right: 16,
-                                  ),
-                                  // padding: const EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(24),
-                                  ),
-                                  child: _buildPlanCard(plan),
+                  Builder(
+                    builder: (context) {
+                      return Expanded(
+                        child: pendingPlans.isEmpty
+                            ? _buildEmptyState()
+                            : RefreshIndicator(
+                                onRefresh: _refreshPlans,
+                                child: ListView.builder(
+                                  physics: const BouncingScrollPhysics(),
+                                  itemCount: pendingPlans.length,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 16),
+                                  itemBuilder: (context, index) {
+                                    final plan = pendingPlans[index];
+                                    return Padding(
+                                      padding: const EdgeInsets.only(),
+                                      child: SwipeableItem(
+                                        key: ValueKey(plan.id),
+                                        leftSwipeColor: Colors.red.shade900,
+                                        rightSwipeColor: Colors.green.shade700,
+                                        onSwipe: (direction) =>
+                                            _handlePlanSwipe(index, direction),
+                                        onRemoved: () => _removePlan(index),
+                                        child: Container(
+                                          margin: const EdgeInsets.only(
+                                            bottom: 10,
+                                            top: 10,
+                                            left: 16,
+                                            right: 16,
+                                          ),
+                                          // padding: const EdgeInsets.all(8.0),
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(24),
+                                          ),
+                                          child: _buildPlanCard(plan),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
-                            );
-                          },
-                        ),
-                      ),
-              );
-            },
+                      );
+                    },
+                  ),
+                ],
+              ),
+              ListView.builder(
+                itemCount: _plans.length - pendingPlans.length,
+                itemBuilder: (context, index) => _buildPlanCard(
+                  _plans[index + pendingPlans.length],
+                ),
+              ),
+              const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('all tasks'),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
+
       // floatingActionButton: FloatingActionButton(
       //   onPressed: () {
       //     // Add new plan (in a real app, this would open a form)
@@ -339,7 +388,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildPlanCard(PlanEntity plan) {
     return Container(
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 17, 17, 17),
         borderRadius: BorderRadius.circular(24),
         border: Border.all(color: Colors.white10),
       ),
@@ -396,15 +444,14 @@ class _HomeScreenState extends State<HomeScreen> {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: Colors.white70,
               ),
             ),
             const SizedBox(height: 8),
             Text(
               plan.description,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 14,
-                color: Colors.grey[400],
+                // color: Colors.grey[400],
               ),
             ),
           ],

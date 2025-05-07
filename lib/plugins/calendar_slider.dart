@@ -99,17 +99,24 @@ class _LinearCalendarSliderState extends State<LinearCalendarSlider> {
                   ),
                 ),
                 const Spacer(),
-                SlideCountdown(
-                  decoration: BoxDecoration(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  duration: const Duration(minutes: 60),
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey[400],
-                  ),
+                // SlideCountdown(
+                //   decoration: BoxDecoration(
+                //     color: Colors.transparent,
+                //     borderRadius: BorderRadius.circular(8),
+                //   ),
+                //   duration: const Duration(minutes: 60),
+                //   style: TextStyle(
+                //     fontSize: 12,
+                //     fontWeight: FontWeight.w500,
+                //     color: Colors.grey[400],
+                //   ),
+                // ),
+                IconButton(
+                  onPressed: () {
+                    setState(_scrollToInitialPosition);
+                  },
+                  icon: const Icon(Icons.refresh),
+                  color: Colors.grey[400],
                 ),
               ],
             ),

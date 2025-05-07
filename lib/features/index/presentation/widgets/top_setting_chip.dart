@@ -15,8 +15,8 @@ class _SettingsChipsRowState extends State<SettingsChipsRow> {
     {"label": "Alarm", "icon": Icons.alarm, "active": false},
     {"label": "Snooze", "icon": Icons.snooze, "active": false},
     {"label": "Mute", "icon": Icons.volume_off, "active": false},
-    // {"label": "Priority", "icon": Icons.priority_high, "active": false},
   ];
+  // {"label": "Priority", "icon": Icons.priority_high, "active": false}, ];
 
   void toggleSetting(int index) {
     setState(() {

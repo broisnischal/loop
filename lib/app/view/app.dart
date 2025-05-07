@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:loop/core/themes/dark.dart';
-import 'package:loop/core/themes/light.dart';
+import 'package:loop/core/themes/theme.dart';
 import 'package:loop/di/injection_config.dart';
 import 'package:loop/l10n/l10n.dart';
 import 'package:loop/router/router.dart';
 
 class App extends StatefulWidget {
-  App({super.key});
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
