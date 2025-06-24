@@ -12,10 +12,12 @@ class EsewaConfig {
   );
   // Production credentials
   static const EsewaConfig production = EsewaConfig(
-    merchantId: 'YOUR_MERCHANT_ID',
-    secretKey: 'YOUR_SECRET_KEY',
-    baseUrl: 'https://epay.esewa.com.np/api/epay/main/v2/form',
+    merchantId: 'EPAYTEST',
+    secretKey: '8gBm/:&EnhH.1/q',
+    baseUrl: 'https://rc-epay.esewa.com.np/api/epay/main/v2/form',
   );
+
+// https://rc-epay.esewa.com.np/api/epay/main/v2/form"
 
   final String merchantId;
 

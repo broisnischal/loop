@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:loop/services/esewa/models/esewa_config.dart';
@@ -54,6 +56,8 @@ class _EsewaPaymentWidgetState extends State<EsewaPaymentWidget> {
     final formFields = formData.entries
         .map((e) => '<input type="hidden" name="${e.key}" value="${e.value}">')
         .join('\n');
+
+    log(formFields);
 
     return '''
     <!DOCTYPE html>

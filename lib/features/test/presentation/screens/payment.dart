@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:loop/di/injection_config.dart';
@@ -70,7 +72,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     Navigator.pop(context);
 
     if (result['success'] == true) {
-      showDialog(
+      showDialog<void>(
         context: context,
         builder: (context) => AlertDialog(
           title: const Text('Payment Successful'),
@@ -122,6 +124,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
     final result = await esewaService.initiatePayment(
       productId: productId,
       productName: 'Test Product',
+      productCode: 'EPAYTEST',
       amount: amount,
       successUrl: 'https://your-backend.com/payment/success',
       failureUrl: 'https://your-backend.com/payment/failure',
@@ -142,7 +145,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
       //     ),
       //   ),
       // );
-      getIt<AppRouter>().push(
+
+      log(result.toString());
+
+      await getIt<AppRouter>().push(
         EsewaPaymentRoute(
           payment: result['payment'] as EsewaPayment,
           paymentUrl: result['paymentUrl'] as String,

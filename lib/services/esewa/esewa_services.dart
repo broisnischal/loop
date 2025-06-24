@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
@@ -29,6 +30,7 @@ class EsewaService {
     required double amount,
     required String successUrl,
     required String failureUrl,
+    required String productCode,
   }) async {
     try {
       final payment = EsewaPayment(
@@ -39,6 +41,7 @@ class EsewaService {
         productServiceCharge: 0,
         productDeliveryCharge: 0,
         taxAmount: 0,
+        productCode: productCode,
         successUrl: successUrl,
         failureUrl: failureUrl,
         signedFieldNames: 'total_amount,transaction_uuid,product_code',
@@ -58,7 +61,10 @@ class EsewaService {
         failureUrl: payment.failureUrl,
         signedFieldNames: payment.signedFieldNames,
         signature: signature,
+        productCode: payment.productCode,
       );
+
+      log(updatedPayment.toString());
 
       return {
         'success': true,

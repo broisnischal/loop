@@ -5,7 +5,7 @@ import 'package:loop/l10n/arb/app_localizations.dart';
 import 'package:loop/router/router.dart';
 
 class App extends StatefulWidget {
-  App({super.key});
+  const App({super.key});
 
   @override
   State<App> createState() => _AppState();
@@ -15,6 +15,31 @@ class _AppState extends State<App> {
   final mainRouter = AppRouter();
 
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return ScreenUtilInit(
+      designSize: const Size(360, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: MaterialApp.router(
+        theme: ThemeData(
+          appBarTheme: const AppBarTheme(
+            // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            backgroundColor: Colors.black,
+            actionsIconTheme: IconThemeData(color: Colors.amber),
+            elevation: 0,
+          ),
+          useMaterial3: true,
+        ), // multiple themes options
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        // home: const HomeScreen(),
+        routerConfig: mainRouter.config(),
+        debugShowCheckedModeBanner: false,
+      ),
+    );
+  }
 
   @override
   void initState() {
@@ -28,30 +53,5 @@ class _AppState extends State<App> {
       });
 
     super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(360, 844),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      child: MaterialApp.router(
-        theme: ThemeData(
-          appBarTheme: const AppBarTheme(
-            // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-            backgroundColor: Colors.black,
-            actionsIconTheme: const IconThemeData(color: Colors.amber),
-            elevation: 0,
-          ),
-          useMaterial3: true,
-        ), // multiple themes options
-        localizationsDelegates: AppLocalizations.localizationsDelegates,
-        supportedLocales: AppLocalizations.supportedLocales,
-        // home: const HomeScreen(),
-        routerConfig: mainRouter.config(),
-        debugShowCheckedModeBanner: false,
-      ),
-    );
   }
 }

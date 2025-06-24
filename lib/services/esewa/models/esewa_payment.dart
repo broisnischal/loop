@@ -11,6 +11,7 @@ class EsewaPayment {
     required this.failureUrl,
     required this.signedFieldNames,
     required this.signature,
+    required this.productCode,
   });
   final String productId;
   final String productName;
@@ -22,20 +23,23 @@ class EsewaPayment {
   final String successUrl;
   final String failureUrl;
   final String signedFieldNames;
+  final String productCode;
 
   final String signature;
 
   Map<String, String> toMap(String merchantId) {
     return {
-      'tAmt': totalAmount.toString(),
-      'amt': productPrice.toString(),
-      'txAmt': taxAmount.toString(),
-      'psc': productServiceCharge.toString(),
-      'pdc': productDeliveryCharge.toString(),
-      'scd': merchantId,
-      'pid': productId,
-      'su': successUrl,
-      'fu': failureUrl,
+      'amount': totalAmount.toString(),
+      'failure_url': failureUrl,
+      'product_delivery_charge': productDeliveryCharge.toString(),
+      'product_service_charge': productServiceCharge.toString(),
+      'product_code': productCode,
+      'signature': signature,
+      'signed_field_names': signedFieldNames,
+      'success_url': successUrl,
+      'tax_amount': taxAmount.toString(),
+      'total_amount': totalAmount.toString(),
+      'transaction_uuid': productId,
     };
   }
 }
