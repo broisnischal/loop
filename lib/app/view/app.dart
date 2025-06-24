@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loop/di/injection_config.dart';
-import 'package:loop/l10n/l10n.dart';
+import 'package:loop/l10n/arb/app_localizations.dart';
 import 'package:loop/router/router.dart';
 
 class App extends StatefulWidget {

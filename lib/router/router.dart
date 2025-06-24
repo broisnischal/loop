@@ -8,12 +8,14 @@ class AppRouter extends RootStackRouter {
       const RouteType.material(); //.cupertino, .adaptive ..etc
 
   @override
-  List<AutoRoute> get routes => [
-        AutoRoute(page: HomePageRoute.page, initial: true),
+  List<AutoRouteGuard> get guards => [
+        // optionally add root guards here
       ];
 
   @override
-  List<AutoRouteGuard> get guards => [
-        // optionally add root guards here
+  List<AutoRoute> get routes => [
+        AutoRoute(page: HomePageRoute.page, initial: true),
+        AutoRoute(page: PaymentRoute.page),
+        AutoRoute(page: EsewaPaymentRoute.page),
       ];
 }
