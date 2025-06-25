@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:loop/di/injection_config.dart';
@@ -35,7 +36,18 @@ class _AppState extends State<App> {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         // home: const HomeScreen(),
-        routerConfig: mainRouter.config(),
+        routerConfig: mainRouter.config(
+          deepLinkBuilder: (deepLink) {
+            if (deepLink.path.startsWith('/deeplink')) {
+              // Enter the path you created for the deep link.
+              return deepLink;
+            } else {
+              return DeepLink.defaultPath;
+              // or DeepLink.path('/')
+              // or DeepLink([HomeRoute()])
+            }
+          },
+        ),
         debugShowCheckedModeBanner: false,
       ),
     );

@@ -17,5 +17,6 @@ class AppRouter extends RootStackRouter {
         AutoRoute(page: HomePageRoute.page, initial: true),
         AutoRoute(page: PaymentRoute.page),
         AutoRoute(page: EsewaPaymentRoute.page),
+        AutoRoute(page: EsewaPaymentRoute.page, path: '/deeplink/esewa'),
       ];
 }
